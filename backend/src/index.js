@@ -11,15 +11,16 @@
 
 const express = require('express'); //Cria rotas
 const mongoose =  require('mongoose'); // Importa a lib de conexão do banco de dados / MongoDB - (Banco Não-relacional)
+const cors =  require('cors'); // Importa a lib de conexão do banco de dados / MongoDB - (Banco Não-relacional)
 const routes = require('./routes');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://nicolas:nicolas@cluster0-i0c0u.mongodb.net/week10?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://nicolas:nicolas@cluster0-i0c0u.mongodb.net/week10?retryWrites=true&w=majority', { /* Link enviado pelo mongoDB Altlas */
     useNewUrlParser: true, // Silenciar erros
     useUnifiedTopology: true
 });
-
+app.use(cors());
 app.use(express.json()); // Validar para todas as rotas da aplicação
 app.use(routes); // Executar as rotas requiridas em ./routes.js
 

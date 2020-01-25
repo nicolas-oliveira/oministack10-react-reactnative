@@ -1,35 +1,109 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import api from './services/api';
+
 import './global.css';
 import './app.css';
 import './Sidebar.css';
 import './Main.css';
 
 function App(){
+
+  const [devs , setDevs] = useState([]);
+
+  const [github_username, setGithub_username] = useState('');
+  const [techs, setTechs] = useState('');
+
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+
+        setLatitude(latitude);
+        setLongitude(longitude);  
+      },
+      (err) => {
+        console.log(err);
+      },
+      {
+        timeout: 30000,
+      }
+    );
+  }, []);
+  useEffect(() => {
+    async function loadDevs() {
+      const response = await api.get('/devs');
+
+      setDevs(response.data);
+    }
+    loadDevs();
+  }, []);
+  async function handleAddDev(e) {
+    e.preventDefault();
+
+    const response = await api.post('./devs', {
+      github_username,
+      techs,
+      latitude,
+      longitude,
+    });
+    setGithub_username('');
+    setTechs('');
+    setLatitude('');
+    setLongitude('');
+  }
+    
   return (
     <div id="app">
       <aside>
         <strong>Cadastrar</strong>
-          <form>
+          <form onSubmit={handleAddDev}>
         
-            <div class="input-block">
+            <div className="input-block">
               <label htmlFor="github_username">Usuário do Github</label>
-              <input name="github_username" id="github_username" required />
+              <input 
+                name="github_username"
+                id="github_username"
+                required
+                value={github_username}
+                onChange ={e => setGithub_username(e.target.value)} /* Input com os estados do react */
+              />
             </div>
 
-            <div class="input-block">
+            <div className="input-block">
               <label htmlFor="techs">Tecnologias</label>
-              <input name="techs" id="techs" required />
+              <input 
+                name="techs"
+                id="techs"
+                required
+                value={techs}
+                onChange ={e => setTechs(e.target.value)}
+              />
             </div>
             
-            <div class="input-group">
+            <div className="input-group">
               <div className="input-block">
                 <label htmlFor="latitude">Latitude</label>
-                <input name="latitude" id="latitude" required />
+                <input 
+                  type="number"
+                  name="latitude" 
+                  id="latitude" 
+                  required value={latitude}
+                  onChange={ e => setLatitude(e.target.value)}
+                />
               </div>
 
               <div className="input-block">
                 <label htmlFor="longitude">Longitude</label>
-                <input name="longitude" id="longitude" required />
+                <input 
+                  type="number"
+                  name="longitude" 
+                  id="longitude" 
+                  required value={longitude}
+                  onChange={ e => setLongitude(e.target.value)}
+                />
               </div>
             </div>
             
@@ -39,52 +113,20 @@ function App(){
       
       <main>
         <ul>
+        {devs.map(dev => (
           <li className="dev-item">
             <header>
-              <img src="https://avatars2.githubusercontent.com/u/45501748?v=4" alt="Nicolas Oliveira"></img>
+              <img src={dev.avatar_url} alt={dev.name}></img>
               <div className="user-info">
-                <strong>Nicolas Oliveira</strong>
-                <span>ReactJS, React Native, Node.js</span>
+                <strong>{dev.name}</strong>
+                <span>{dev.techs.join(',')}</span>
               </div> 
             </header>
-            <p>Programador Iniciante, amante da tecnologia, aspirante das tecnologias JS e Web em geral. Curisoso, em busca de conhecimento e se tornar Júnior em programação</p>
-          <a href="https://github.com/nicolas-oliveira">Acessar perfil no Github</a>
-          </li>
-
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars2.githubusercontent.com/u/45501748?v=4" alt="Nicolas Oliveira"></img>
-              <div className="user-info">
-                <strong>Nicolas Oliveira</strong>
-                <span>ReactJS, React Native, Node.js</span>
-              </div> 
-            </header>
-            <p>Programador Iniciante, amante da tecnologia, aspirante das tecnologias JS e Web em geral. Curisoso, em busca de conhecimento e se tornar Júnior em programação</p>
-          <a href="https://github.com/nicolas-oliveira">Acessar perfil no Github</a>
-          </li>
-
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars2.githubusercontent.com/u/45501748?v=4" alt="Nicolas Oliveira"></img>
-              <div className="user-info">
-                <strong>Nicolas Oliveira</strong>
-                <span>ReactJS, React Native, Node.js</span>
-              </div> 
-            </header>
-            <p>Programador Iniciante, amante da tecnologia, aspirante das tecnologias JS e Web em geral. Curisoso, em busca de conhecimento e se tornar Júnior em programação</p>
-          <a href="https://github.com/nicolas-oliveira">Acessar perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars2.githubusercontent.com/u/45501748?v=4" alt="Nicolas Oliveira"></img>
-              <div className="user-info">
-                <strong>Nicolas Oliveira</strong>
-                <span>ReactJS, React Native, Node.js</span>
-              </div> 
-            </header>
-            <p>Programador Iniciante, amante da tecnologia, aspirante das tecnologias JS e Web em geral. Curisoso, em busca de conhecimento e se tornar Júnior em programação</p>
-          <a href="https://github.com/nicolas-oliveira">Acessar perfil no Github</a>
-          </li>
+            <p>{dev.bio}</p>
+          <a href={`https://github.com/${dev.github_username}`} target="_blank">Acessar perfil no Github</a>
+          </li> 
+        ))}
+          
         </ul>
       </main>
     </div>
