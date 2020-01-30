@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react';
 
 function DevForm({ onSubmit }){
-
+    /* Definição dos estados dos formulários da aplicação */
     const [github_username, setGithub_username] = useState('');
     const [techs, setTechs] = useState('');
     const [latitude, setLatitude] = useState('');
     const [longitude, setLongitude] = useState('');
 
+    /* Definição da função padrão do navegador getCurrentPositon 
+    é executada quando a aplicação é aberta a primeira vez */
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.getCurrentPosition( // Aqui a func está em formato de callback desestruturando lat e long
           (position) => {
             const { latitude, longitude } = position.coords;
     
@@ -19,11 +21,11 @@ function DevForm({ onSubmit }){
             console.log(err);
           },
           {
-            timeout: 30000,
+            timeout: 30000, 
           }
         );
     }, []);
-
+    /* Função de submit do cadastro de novos dados */
     async function handleSubmit(e) {
         e.preventDefault();
 

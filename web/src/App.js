@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import api from './services/api';
+import api from './services/api'; /* Importação da api axios método get */
 
+/* Importação de todos os estilos da aplicação */
 import './global.css';
 import './app.css';
 import './Sidebar.css';
 import './Main.css';
 
+/* Importação de todos os componentes */
 import DevForm from './components/DevForm';
 import DevItem from './components/DevItem';
 

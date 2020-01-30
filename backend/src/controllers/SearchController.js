@@ -1,9 +1,10 @@
+const axios = require('axios');
 const Dev = require('../models/dev');
 const parseStringAsArray = require('../utils/parseStringAsArray');
 
 module.exports = {
     async index(request, response){
-        //buscar em raio de 10km 
+        // buscar em raio de 10km 
         // filtrar por tecnologias
         const { latitude, longitude, techs } =  request.query;
 
@@ -19,11 +20,11 @@ module.exports = {
                         type: 'Point',
                         coordinates: [longitude, latitude],
                     },
-                    $maxDistance: 10000,
+                    $maxDistance: 100000,
                 },
-            },
+            }, 
         });
-        
-        return response.json({ devs:[ ]})
+        console.log(techsArray);
+        return response.json({ devs });
     }
 }

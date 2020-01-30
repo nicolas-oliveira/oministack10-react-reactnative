@@ -24,7 +24,7 @@ module.exports = {
         
         /* ###### Evitar que repita o usuário no banco ####### */
         let dev = await Dev.findOne({ github_username }); //Let para permitir que repita
-        if(!dev){
+        if(!dev){ 
             const ApiResponse = await axios.get(`https://api.github.com/users/${github_username}`);
     
             const { name = login, avatar_url, bio } = ApiResponse.data;

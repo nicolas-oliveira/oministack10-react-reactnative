@@ -1,7 +1,9 @@
 import React  from 'react';
-import './styles.css'
+import './styles.css';
+
 function DevItem({dev}){
     //const {dev} = props;
+    /* Definição do elemento DevItem que contém a informação dos Devs cadastrados */
     return(
         <li key={dev._id} className="dev-item">
             <header>
