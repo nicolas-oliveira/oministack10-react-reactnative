@@ -11,4 +11,7 @@ Aplicação de geolocalização para encontrar devs próximos que usam tecnologi
 - Express
 - Axios
 - MongoDB
+- Expo
 
+# View Web Version
+![print](https://raw.githubusercontent.com/nicolas-oliveira/images/master/oministack10_1.png)
