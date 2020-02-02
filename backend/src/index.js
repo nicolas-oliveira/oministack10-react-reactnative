@@ -12,9 +12,16 @@
 const express = require('express'); //Cria rotas
 const mongoose =  require('mongoose'); // Importa a lib de conexão do banco de dados / MongoDB - (Banco Não-relacional)
 const cors =  require('cors'); // Importa a lib de conexão do banco de dados / MongoDB - (Banco Não-relacional)
+const http = require('http'); // Cria um servidor Http
+
 const routes = require('./routes');
+const {setupWebsocket} = require('./websocket');
 
 const app = express();
+const server = http.Server(app); // Coloca o servidor do express para fora 
+
+setupWebsocket(server);
+
 
 mongoose.connect('mongodb+srv://nicolas:nicolas@cluster0-i0c0u.mongodb.net/week10?retryWrites=true&w=majority', { /* Link enviado pelo mongoDB Altlas */
     useNewUrlParser: true, // Silenciar erros

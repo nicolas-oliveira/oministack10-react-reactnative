@@ -5,11 +5,13 @@ import {requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons' /* Importação dos ícones, usado no botão de enviar */
 
 import api from '../services/api';
+import {connect, disconnect, subscribeToNewDevs} from '../services/socket'; /* Script de RealTime */
 
 function Main({ navigation }) {
     const [devs, setDevs] = useState([]);
     const [ currentRegion, setCurrentRegion ] = useState(null);
     const [techs,setTechs] = useState('')
+
     useEffect(()=>{
         async function loadInitialPosition(){
             const { granted } = await requestPermissionsAsync();
@@ -33,6 +35,21 @@ function Main({ navigation }) {
         loadInitialPosition();        
     }, []);
     
+    useEffect(() => {
+        subscribeToNewDevs(dev => setDevs([...devs, dev])); /* Copia todos os anteriores e adiciona mais um após passar pelos websockets*/
+    }, [devs]);
+
+    function setupWebsocket() { 
+        disconnect();
+
+        const {latitude, longitude } = currentRegion;
+        connect(
+            latitude,
+            longitude,
+            techs,
+        );
+    }
+
     async function loadDevs() {
         const {latitude, longitude} = currentRegion;
 
@@ -43,8 +60,9 @@ function Main({ navigation }) {
                 techs
             }
         });
-        console.log(response.data.devs)
+        console.log(response.data.devs);
         setDevs(response.data.devs);
+        setupWebsocket();
     }
 
     function handleRegionChanged(region) {
