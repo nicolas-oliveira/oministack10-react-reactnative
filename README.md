@@ -1,4 +1,4 @@
-# GEODEV 
+# `GEODEV`
 
 Aplicação de geolocalização para encontrar devs próximos que usam tecnologias específicas, criado em Javascript, Node, React e ReactNative
 
