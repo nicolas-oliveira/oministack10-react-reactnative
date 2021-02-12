@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./.github/geodev.png" width="200px"></img>
+<img src="./.github/geodev.png" width="400px"></img>
 </div>
 
 Aplicação de geolocalização para encontrar devs próximos que usam tecnologias específicas, criado em Javascript, Node, React e ReactNative
